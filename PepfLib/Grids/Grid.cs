@@ -116,6 +116,7 @@ public class Grid<T>
         }
         return -1;
     }
+    // Get the best path from starting cell to end cell.
     public static Cell[] ShortestPath(Grid<T> grid, Cell start, Cell end, Predicate<T> walkable, Cell[]? dirs = null)
     {
         if (start == end) return [start];
@@ -144,6 +145,7 @@ public class Grid<T>
         }
         return [];
     }
+    // Each Cell saves the previous cell. Get a full path back.
     public static Cell[] BackTracePath(Cell end, Grid<Cell?> prev)
     {
         var current = end;
