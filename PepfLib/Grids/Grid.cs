@@ -72,6 +72,9 @@ public class Grid<T>
     // Shortest path from start cell to end cell
     public Cell[] ShortestPath(Cell start, Cell end, Predicate<T> walkable, Cell[]? dirs = null)
         => ShortestPath(this, start, end, walkable, dirs);
+    // Shortest weighted path from start cell to end cell
+    public int ShortestWeightedDistance(Grid<int> weight, Cell start, Cell end, Predicate<T> walkable, Cell[]? dirs = null)
+        => ShortestWeightedDistance(this, weight, start, end, walkable, dirs);
 
     // Grid as a string, one line per row
     public override string ToString()
@@ -159,6 +162,34 @@ public class Grid<T>
         path.Add(current);
         path.Reverse();
         return path.ToArray();
+    }
+    // Get best weighted distance from starting cell to end cell, with each cell having a weight.
+    public static int ShortestWeightedDistance(Grid<T> grid, Grid<int> weight, Cell start, Cell end,
+        Predicate<T> walkable, Cell[]? dirs = null)
+    {
+        if (start == end) return 0;
+        var weightDist = new Grid<int>(grid.Rows, grid.Cols, int.MaxValue);
+        var next = new PriorityQueue<Cell, int>();
+        weightDist[start] = 0;
+        next.Enqueue(start, 0);
+
+        while (next.TryDequeue(out var current, out var totalWeight))
+        {
+            if (totalWeight > weightDist[current]) continue;
+            if (current == end) return totalWeight;
+
+            foreach (var nb in grid.Neighbors(current, dirs))
+            {
+                if (!walkable(grid[nb])) continue;
+                int nextWeight = totalWeight + weight[nb];
+                if (nextWeight < weightDist[nb])
+                {
+                    weightDist[nb] = nextWeight;
+                    next.Enqueue(nb, nextWeight);
+                }
+            }
+        }
+        return -1;
     }
 }
 
