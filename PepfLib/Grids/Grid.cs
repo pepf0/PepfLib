@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Drawing;
+using System.Text;
 
 namespace PepfLib.Grids;
 
@@ -204,4 +205,6 @@ public readonly record struct Cell(int Row, int Col)
 
     public static implicit operator Cell((int row, int col) a) => new Cell(a.row, a.col);
     public static implicit operator (int row, int col)(Cell a) => (a.Row, a.Col);
+
+    public static int ManhattanDistance(Cell a, Cell b) => Math.Abs(a.Row - b.Row) + Math.Abs(a.Col - b.Col);
 }
