@@ -201,10 +201,13 @@ public readonly record struct Cell(int Row, int Col)
     public static Cell operator -(Cell a, Cell b) => (a.Row - b.Row, a.Col - b.Col);
     public static Cell operator -(Cell a) => (-a.Row, -a.Col);
     public static Cell operator *(Cell a, int b) => (a.Row * b, a.Col * b);
+    public static Cell operator *(int a, Cell b) => b * a;
     public static Cell operator /(Cell a, int b) => (a.Row / b, a.Col / b);
 
     public static implicit operator Cell((int row, int col) a) => new Cell(a.row, a.col);
     public static implicit operator (int row, int col)(Cell a) => (a.Row, a.Col);
 
     public static int ManhattanDistance(Cell a, Cell b) => Math.Abs(a.Row - b.Row) + Math.Abs(a.Col - b.Col);
+    public static double EuclideanDistance(Cell a, Cell b) => Math.Sqrt((a.Row - b.Row) * (a.Row - b.Row) + (a.Col - b.Col) * (a.Col - b.Col));
+
 }
